@@ -33,6 +33,7 @@ app.UseHttpsRedirection();
 app.UseSession();
 
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

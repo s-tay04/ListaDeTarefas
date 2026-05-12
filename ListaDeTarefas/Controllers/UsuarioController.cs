@@ -27,6 +27,12 @@ namespace ListaDeTarefas.Controllers
         [HttpPut("atualizar/{id}")]
         public IActionResult AtualizaDatos(int id, Usuario usuario)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");  
+            }
+
             var usuarioDoBanco = _context.Usuario.Find(id);
 
             if (usuarioDoBanco == null)
@@ -44,6 +50,12 @@ namespace ListaDeTarefas.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletaUsuario(int id)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");
+            }
+
             var usuario = _context.Usuario.Find(id);
 
             if (usuario == null)

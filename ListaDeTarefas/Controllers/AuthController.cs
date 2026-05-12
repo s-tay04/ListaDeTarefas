@@ -1,6 +1,8 @@
-﻿using ListaDeTarefas.Data;
+﻿using Azure;
+using ListaDeTarefas.Data;
 using ListaDeTarefas.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListaDeTarefas.Controllers
 {
@@ -13,30 +15,6 @@ namespace ListaDeTarefas.Controllers
         public AuthController(DBContext context)
         {
             _context = context;
-        }
-
-        [HttpPost("login")]
-        public IActionResult Login(Login login)
-        {
-            var usuarioDoBanco = _context.Usuario
-                .FirstOrDefault(u => u.Email == login.Email && u.Senha == login.Senha);
-
-            if (usuarioDoBanco == null)
-            {
-                return Unauthorized("Usuário ou senha incorretos no banco de dados");
-            }
-
-            HttpContext.Session.SetString("EmailLogin", usuarioDoBanco.Email);
-
-            Response.Cookies.Append("Email", usuarioDoBanco.Email,
-                new CookieOptions
-                {
-                    Expires = DateTime.Now.AddMinutes(30),
-                    HttpOnly = true
-                }
-            );
-
-            return Ok("Bem-vindo! Login realizado com sucesso!");
         }
 
         [HttpGet("inicial")]
@@ -59,6 +37,24 @@ namespace ListaDeTarefas.Controllers
             Response.Cookies.Delete("Email");
 
             return Ok("Logout realizado com sucesso!");
+        }
+
+
+        [HttpPost("login")]
+        public IActionResult LoginUsuario(Usuario usuario)
+        {
+            var resultadoUsuario = _context.Usuario.Where
+                (u => u.Email.Equals(usuario.Email) && u.Senha.Equals(usuario.Senha)).ToList();
+
+            if (resultadoUsuario.Count == 0)
+            {
+                return Unauthorized("Email ou senha inválidos");
+            }
+
+            HttpContext.Session.SetString("IdLogado", resultadoUsuario[0].Id.ToString());
+            Response.Cookies.Append("IdLogado", resultadoUsuario[0].Id.ToString());
+
+            return Ok("Login realizado com sucesso");
         }
     }
 }

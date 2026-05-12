@@ -19,6 +19,18 @@ namespace ListaDeTarefas.Controllers
         [HttpPost("cadastrar")]
         public IActionResult CadastraTarefa(Tarefa tarefa)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");
+            }
+
+            var id = Request.Cookies["IdLogado"];
+            if (id != null)
+            {
+                tarefa.UsuarioId = int.Parse(id);
+            }
+
             var usuarioExiste = _context.Usuario.Any(u => u.Id == tarefa.UsuarioId);
 
             if (!usuarioExiste)
@@ -34,6 +46,12 @@ namespace ListaDeTarefas.Controllers
         [HttpPut("atualizar/{id}")]
         public IActionResult AtualizaDatos(int id, Tarefa tarefa)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");
+            }
+
             var tarefaDoBanco = _context.Tarefa.Find(id);
 
             if (tarefaDoBanco == null)
@@ -51,6 +69,12 @@ namespace ListaDeTarefas.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletaTarefa(int id)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");
+            }
+
             var tarefa = _context.Tarefa.Find(id);
 
             if (tarefa == null)
@@ -65,6 +89,12 @@ namespace ListaDeTarefas.Controllers
         [HttpGet("{id}")]
         public IActionResult SolicitaTarefaID(int id)
         {
+            var logado = Request.Cookies["IdLogado"];
+            if (logado != null)
+            {
+                return Unauthorized("Realize o login para continuar.");
+            }
+
             var tarefa = _context.Tarefa
                 .Include(t => t.Usuario)
                 .FirstOrDefault(t => t.Id == id);
