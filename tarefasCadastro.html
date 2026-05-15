@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar tarefa</title>
+</head>
+<body>
+
+    <div class="navegador">
+        <nav class="menu">
+            <a href="../html/home.html" class="ativo">Início</a>
+            <a href="../html/tarefasCadastro.html">Cadastrar tarefa</a>
+            <a href="../html/meuPerfil.html">Meu perfil</a>
+        </nav>   
+    </div>
+    
+    <div>
+        <h1>Cadastrar tarefa</h1>
+        <label for="descricao">Qual a sua tarefa?</label>
+        <input type="text" id="descricao" placeholder="Digite aqui...">
+
+        <label for="status">Qual o status desta tarefa?</label>
+            Iniciada <input type="radio" name="status" id="status" value="i">
+            Em processo <input type="radio" name="status" id="status" value="e">
+            Concluída <input type="radio" name="status" id="status" value="c">
+        
+            <input type="submit" value="Cadastrar">
+
+    </div>
+
+</body>
+</html>
